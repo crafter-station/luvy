@@ -57,21 +57,21 @@ function RaceFeedCard({
 
 function LandingHeroArt() {
   return (
-    <div className="relative mx-auto min-h-[34rem] w-full max-w-lg sm:min-h-[36rem] lg:max-w-none lg:min-h-[38rem]">
+    <div className="relative mx-auto min-h-[32rem] w-full max-w-lg sm:min-h-[36rem] lg:max-w-none lg:min-h-[38rem]">
       <div className="absolute left-0 top-8 h-64 w-64 rounded-full bg-luvy-blue/20 blur-3xl" />
       <div className="absolute bottom-10 right-0 h-72 w-72 rounded-full bg-luvy-coral/20 blur-3xl" />
       <Image
         alt="Luvy race plate"
-        className="absolute right-0 top-2 w-64 rotate-[-7deg] drop-shadow-[0_28px_50px_rgb(91_53_200_/_18%)] sm:w-72 lg:top-4 lg:w-80"
+        className="absolute -right-8 top-12 w-56 rotate-[-7deg] drop-shadow-[0_28px_50px_rgb(91_53_200_/_18%)] sm:right-0 sm:top-2 sm:w-72 lg:top-4 lg:w-80"
         priority
         sizes="(min-width: 1024px) 352px, 288px"
         src={plate}
       />
       <LuvyMascot
-        className="absolute bottom-0 right-2 h-60 w-48 drop-shadow-[0_30px_50px_rgb(40_30_50_/_18%)] sm:h-64 sm:w-52 lg:h-72 lg:w-56"
+        className="absolute bottom-2 -right-3 h-48 w-40 drop-shadow-[0_30px_50px_rgb(40_30_50_/_18%)] sm:right-2 sm:h-64 sm:w-52 lg:h-72 lg:w-56"
         pose="hi"
       />
-      <div className="absolute bottom-12 left-0 z-20 grid w-66 gap-3 sm:left-6 sm:w-72 lg:bottom-16">
+      <div className="absolute bottom-6 left-0 z-20 grid w-48 gap-2 sm:bottom-12 sm:left-6 sm:w-72 sm:gap-3 lg:bottom-16">
         {[
           [
             "unlock",
@@ -83,29 +83,37 @@ function LandingHeroArt() {
             "dad",
             "Dad",
             "Save a kick for the last hill. You have done harder things.",
-            "ml-8 bg-luvy-blue text-white shadow-[0_16px_40px_rgb(95_156_246_/_24%)]",
+            "ml-4 bg-luvy-blue text-white shadow-[0_16px_40px_rgb(95_156_246_/_24%)] sm:ml-8",
           ],
           [
             "crew",
             "Group chat",
             "We are screaming from the curb. Go get it.",
-            "mr-10 bg-luvy-coral text-white shadow-[0_16px_40px_rgb(255_120_107_/_22%)]",
+            "mr-5 bg-luvy-coral text-white shadow-[0_16px_40px_rgb(255_120_107_/_22%)] sm:mr-10",
           ],
           [
             "friend",
             "Best friend",
             "Breathe, smile, one more mile. We love you.",
-            "ml-12 bg-card text-card-foreground shadow-[0_16px_40px_rgb(40_30_50_/_14%)] dark:bg-luvy-lavender",
+            "ml-6 bg-card text-card-foreground shadow-[0_16px_40px_rgb(40_30_50_/_14%)] dark:bg-luvy-lavender sm:ml-12",
           ],
         ].map(([id, eyebrow, message, className]) => (
-          <div className={`rounded-[1.5rem] px-5 py-4 ${className}`} key={id}>
-            <p className="font-bold text-[0.68rem] uppercase tracking-[0.18em] opacity-75">
+          <div
+            className={`rounded-[1.15rem] px-3 py-2.5 sm:rounded-[1.5rem] sm:px-5 sm:py-4 ${className}`}
+            key={id}
+          >
+            <p className="font-bold text-[0.54rem] uppercase tracking-[0.18em] opacity-75 sm:text-[0.68rem]">
               {eyebrow}
             </p>
-            <div className="mt-2 flex items-center justify-between gap-4">
-              <p className="font-bold text-base leading-snug">{message}</p>
+            <div className="mt-1.5 flex items-center justify-between gap-2 sm:mt-2 sm:gap-4">
+              <p className="font-bold text-xs leading-snug sm:text-base">
+                {message}
+              </p>
               {id === "unlock" ? (
-                <PlayCircle className="size-9 shrink-0" weight="fill" />
+                <PlayCircle
+                  className="size-7 shrink-0 sm:size-9"
+                  weight="fill"
+                />
               ) : null}
             </div>
           </div>
@@ -222,15 +230,15 @@ function LandingPage() {
 
         <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
           <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-            <div className="relative min-h-80 overflow-hidden">
+            <div className="relative min-h-80 overflow-hidden sm:min-h-96">
               <Image
                 alt="Luvy race plate"
-                className="absolute left-1/2 top-0 w-64 -translate-x-1/2 rotate-6 opacity-90 sm:w-80"
+                className="absolute left-1 top-2 w-52 rotate-6 opacity-90 sm:left-8 sm:w-72 lg:w-80"
                 sizes="(min-width: 640px) 320px, 256px"
                 src={plate}
               />
               <LuvyMascot
-                className="absolute bottom-0 left-1/2 h-72 w-56 -translate-x-1/2 drop-shadow-[0_28px_45px_rgb(40_30_50_/_18%)] sm:h-[21rem] sm:w-64"
+                className="absolute bottom-0 right-1 h-56 w-44 drop-shadow-[0_28px_45px_rgb(40_30_50_/_18%)] sm:right-8 sm:h-[21rem] sm:w-64"
                 pose="sitting"
               />
             </div>
@@ -346,11 +354,7 @@ function LandingPage() {
             </div>
             <div className="relative min-h-72">
               <LuvyMascot
-                className="absolute left-2 top-6 h-56 w-44 -rotate-6 opacity-90 sm:left-10"
-                pose="default"
-              />
-              <LuvyMascot
-                className="absolute bottom-0 right-4 h-64 w-52 rotate-6 drop-shadow-[0_30px_50px_rgb(40_30_50_/_18%)] sm:right-14"
+                className="absolute bottom-0 left-1/2 h-64 w-52 -translate-x-1/2 drop-shadow-[0_30px_50px_rgb(40_30_50_/_18%)] sm:h-72 sm:w-56"
                 pose="hi"
               />
             </div>
