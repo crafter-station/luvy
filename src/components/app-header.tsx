@@ -17,7 +17,7 @@ export function AppHeader({
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div
           className={cn(
-            "mx-auto flex h-16 w-full items-center justify-between px-4 box-content",
+            "mx-auto flex h-16 w-full items-center justify-between px-4",
             wide ? "max-w-6xl sm:px-6 lg:px-8" : "max-w-md",
           )}
         >
