@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "sharelove-run",
+      "name": "luvy",
       "dependencies": {
         "@base-ui/react": "^1.4.1",
         "@clerk/nextjs": "^7.3.5",

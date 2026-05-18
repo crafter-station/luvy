@@ -1,6 +1,6 @@
-# Sharelove Run
+# luvy
 
-Sharelove Run is a race-day voice note app. Runners create a public race page, share it with supporters, and collect audio messages that unlock when the race starts. Supporters can leave public or private encouragement without needing a separate app.
+luvy is a race-day voice note app. Runners create a public race page, share it with supporters, and collect audio messages that unlock when the race starts. Supporters can leave public or private encouragement without needing a separate app.
 
 ## Stack
 
