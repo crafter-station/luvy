@@ -1,4 +1,3 @@
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import {
   ArrowRight,
@@ -16,6 +15,11 @@ import Link from "next/link";
 
 import plate from "@/app/public/assets/plate.png";
 import { AppHeader } from "@/components/app-header";
+import {
+  LandingCreateRaceButton,
+  LandingFooterAuthLink,
+  LandingHeroCtas,
+} from "@/components/landing-auth-links";
 import { LuvyMascot } from "@/components/luvy-mascot";
 import { RabbitEarsLogo } from "@/components/rabbit-ears-logo";
 import { Button } from "@/components/ui/button";
@@ -161,19 +165,7 @@ export function LandingPage() {
                 Luvy helps runners collect personal audio notes before race day,
                 then unlocks them when motivation matters most.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <SignUpButton mode="redirect">
-                  <Button size="lg">
-                    Create your race page
-                    <ArrowRight />
-                  </Button>
-                </SignUpButton>
-                <SignInButton mode="redirect">
-                  <Button size="lg" variant="outline">
-                    Sign in
-                  </Button>
-                </SignInButton>
-              </div>
+              <LandingHeroCtas />
               <div className="mt-8 grid max-w-xl gap-3 text-muted-foreground text-sm sm:grid-cols-3">
                 {[
                   "Supporters record in the browser",
@@ -281,12 +273,10 @@ export function LandingPage() {
                 ))}
               </ol>
               <div className="mt-8">
-                <SignUpButton mode="redirect">
-                  <Button size="lg">
-                    Start sending love
-                    <ArrowRight />
-                  </Button>
-                </SignUpButton>
+                <LandingCreateRaceButton>
+                  Start sending love
+                  <ArrowRight />
+                </LandingCreateRaceButton>
               </div>
             </div>
           </div>
@@ -346,11 +336,9 @@ export function LandingPage() {
                     <ArrowRight />
                   </Button>
                 </Link>
-                <SignUpButton mode="redirect">
-                  <Button size="lg" variant="outline">
-                    Create a race page
-                  </Button>
-                </SignUpButton>
+                <LandingCreateRaceButton variant="outline">
+                  Create a race page
+                </LandingCreateRaceButton>
               </div>
             </div>
             <div className="relative min-h-72">
@@ -372,8 +360,8 @@ export function LandingPage() {
             <span className="text-2xl">luvy</span>
           </Link>
           <nav className="flex flex-wrap gap-x-6 gap-y-3">
-            <FooterLink href="/sign-up">Create race page</FooterLink>
-            <FooterLink href="/sign-in">Sign in</FooterLink>
+            <FooterLink href="/dashboard/runs/new">Create race page</FooterLink>
+            <LandingFooterAuthLink />
             <FooterLink href="/races">Races</FooterLink>
             <FooterLink href="https://github.com/crafter-station/luvy">
               GitHub
