@@ -3,7 +3,6 @@ import { auth } from "@clerk/nextjs/server";
 import {
   ArrowRight,
   CalendarHeart,
-  CheckCircle,
   Heart,
   LockSimple,
   Microphone,
@@ -12,8 +11,10 @@ import {
   Sparkle,
   Waveform,
 } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
 import Link from "next/link";
 
+import plate from "@/app/public/assets/plate.png";
 import { AppHeader } from "@/components/app-header";
 import { LuvyMascot } from "@/components/luvy-mascot";
 import { Button } from "@/components/ui/button";
@@ -56,55 +57,78 @@ function RaceFeedCard({
 
 function LandingHeroArt() {
   return (
-    <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
-      <div className="absolute -left-6 top-14 h-32 w-32 rounded-full bg-luvy-blue/25 blur-3xl" />
-      <div className="absolute -right-4 bottom-8 h-40 w-40 rounded-full bg-luvy-coral/20 blur-3xl" />
-      <div className="relative overflow-hidden rounded-[2rem] border bg-linear-to-br from-white via-luvy-panel to-luvy-lavender/70 p-4 shadow-[0_30px_80px_rgb(91_53_200_/_18%)] dark:from-card dark:via-card dark:to-luvy-lavender">
-        <div className="rounded-[1.5rem] bg-background/80 p-4 shadow-inner">
-          <div className="flex items-center justify-between gap-3 rounded-3xl bg-luvy-purple px-4 py-3 text-primary-foreground shadow-lg">
-            <div>
-              <p className="font-bold text-xs uppercase tracking-[0.18em] opacity-80">
-                Mile 21 unlock
-              </p>
-              <p className="mt-1 font-bold text-lg">Mom sent you love</p>
+    <div className="relative mx-auto min-h-[34rem] w-full max-w-lg sm:min-h-[36rem] lg:max-w-none lg:min-h-[38rem]">
+      <div className="absolute left-0 top-8 h-64 w-64 rounded-full bg-luvy-blue/20 blur-3xl" />
+      <div className="absolute bottom-10 right-0 h-72 w-72 rounded-full bg-luvy-coral/20 blur-3xl" />
+      <Image
+        alt="Luvy race plate"
+        className="absolute right-0 top-2 w-64 rotate-[-7deg] drop-shadow-[0_28px_50px_rgb(91_53_200_/_18%)] sm:w-72 lg:top-4 lg:w-80"
+        priority
+        sizes="(min-width: 1024px) 352px, 288px"
+        src={plate}
+      />
+      <LuvyMascot
+        className="absolute bottom-0 right-2 h-60 w-48 drop-shadow-[0_30px_50px_rgb(40_30_50_/_18%)] sm:h-64 sm:w-52 lg:h-72 lg:w-56"
+        pose="hi"
+      />
+      <div className="absolute bottom-12 left-0 z-20 grid w-66 gap-3 sm:left-6 sm:w-72 lg:bottom-16">
+        {[
+          [
+            "unlock",
+            "Mile 21 unlock",
+            "Mom sent you love",
+            "bg-primary text-primary-foreground shadow-[0_20px_50px_rgb(91_53_200_/_25%)]",
+          ],
+          [
+            "dad",
+            "Dad",
+            "Save a kick for the last hill. You have done harder things.",
+            "ml-8 bg-luvy-blue text-white shadow-[0_16px_40px_rgb(95_156_246_/_24%)]",
+          ],
+          [
+            "crew",
+            "Group chat",
+            "We are screaming from the curb. Go get it.",
+            "mr-10 bg-luvy-coral text-white shadow-[0_16px_40px_rgb(255_120_107_/_22%)]",
+          ],
+          [
+            "friend",
+            "Best friend",
+            "Breathe, smile, one more mile. We love you.",
+            "ml-12 bg-card text-card-foreground shadow-[0_16px_40px_rgb(40_30_50_/_14%)] dark:bg-luvy-lavender",
+          ],
+        ].map(([id, eyebrow, message, className]) => (
+          <div className={`rounded-[1.5rem] px-5 py-4 ${className}`} key={id}>
+            <p className="font-bold text-[0.68rem] uppercase tracking-[0.18em] opacity-75">
+              {eyebrow}
+            </p>
+            <div className="mt-2 flex items-center justify-between gap-4">
+              <p className="font-bold text-base leading-snug">{message}</p>
+              {id === "unlock" ? (
+                <PlayCircle className="size-9 shrink-0" weight="fill" />
+              ) : null}
             </div>
-            <PlayCircle className="size-10" weight="fill" />
           </div>
-          <div className="mt-5 grid grid-cols-[1fr_auto] items-end gap-4">
-            <div className="grid gap-3">
-              {[
-                ["wave-coral-tall", "h-14", "bg-luvy-coral"],
-                ["wave-purple-short", "h-8", "bg-luvy-purple"],
-                ["wave-blue-peak", "h-20", "bg-luvy-blue"],
-                ["wave-coral-mid", "h-12", "bg-luvy-coral"],
-                ["wave-purple-mid", "h-16", "bg-luvy-purple"],
-                ["wave-blue-short", "h-10", "bg-luvy-blue"],
-              ].map(([id, height, color]) => (
-                <div className="flex items-center gap-2" key={id}>
-                  <span className="h-2 w-2 rounded-full bg-foreground/25" />
-                  <span
-                    className={`${height} w-full rounded-full ${color} opacity-80`}
-                  />
-                </div>
-              ))}
-            </div>
-            <LuvyMascot className="h-60 w-44 sm:h-72 sm:w-52" pose="hi" />
-          </div>
-          <div className="mt-5 grid gap-3 rounded-3xl border bg-card p-4 sm:grid-cols-3">
-            {[
-              [CalendarHeart, "Race page"],
-              [Microphone, "Voice notes"],
-              [LockSimple, "Timed unlocks"],
-            ].map(([Icon, label]) => (
-              <div className="flex items-center gap-2" key={label as string}>
-                <Icon className="size-5 text-luvy-purple" weight="fill" />
-                <span className="font-bold text-sm">{label as string}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
+  );
+}
+
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      className="text-muted-foreground text-sm transition-colors hover:text-foreground"
+      href={href}
+    >
+      {children}
+    </Link>
   );
 }
 
@@ -113,20 +137,20 @@ function LandingPage() {
     <div className="relative left-1/2 w-dvw -translate-x-1/2 bg-background">
       <AppHeader showBottomNav={false} wide />
       <main className="overflow-hidden">
-        <section className="relative px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
-          <div className="absolute inset-x-0 top-0 -z-10 h-80 bg-linear-to-b from-luvy-lavender/70 to-transparent" />
-          <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.02fr_0.98fr]">
+        <section className="relative px-4 pb-16 pt-10 sm:px-6 sm:pb-24 sm:pt-16 lg:px-8 lg:pt-24">
+          <div className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-linear-to-b from-luvy-lavender/70 via-luvy-peach/30 to-transparent dark:from-luvy-lavender/45 dark:via-transparent" />
+          <div className="mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1.02fr_0.98fr]">
             <div className="max-w-2xl">
-              <p className="flex w-fit items-center gap-2 rounded-full border bg-card px-4 py-2 font-bold text-luvy-purple text-xs uppercase tracking-[0.18em] shadow-sm">
+              <p className="flex w-fit items-center gap-2 font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
                 <Heart className="size-4" weight="fill" />
-                Voice notes for race day
+                Open-source race day support
               </p>
               <h1 className="mt-6 text-balance font-bold text-5xl tracking-[-0.07em] sm:text-7xl lg:text-8xl">
-                Love that shows up at the hard mile.
+                Turn every hard mile into a voice from home.
               </h1>
               <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-8 sm:text-xl">
-                Create a race page, invite your people to record audio, and let
-                Luvy unlock their voices when the run gets tough.
+                Luvy helps runners collect personal audio notes before race day,
+                then unlocks them when motivation matters most.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <SignUpButton mode="redirect">
@@ -141,17 +165,14 @@ function LandingPage() {
                   </Button>
                 </SignInButton>
               </div>
-              <div className="mt-8 grid gap-3 text-muted-foreground text-sm sm:grid-cols-3">
+              <div className="mt-8 grid max-w-xl gap-3 text-muted-foreground text-sm sm:grid-cols-3">
                 {[
-                  "No app download for supporters",
-                  "Private audio until unlock",
-                  "Built for real race-day emotion",
+                  "Supporters record in the browser",
+                  "Messages stay private until unlock",
+                  "MIT-licensed and open source",
                 ].map((item) => (
                   <div className="flex items-center gap-2" key={item}>
-                    <CheckCircle
-                      className="size-5 text-luvy-coral"
-                      weight="fill"
-                    />
+                    <span className="size-2 rounded-full bg-luvy-coral" />
                     <span>{item}</span>
                   </div>
                 ))}
@@ -161,64 +182,98 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="px-4 py-6 sm:px-6 lg:px-8">
-          <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
-            {[
-              [
-                ShareNetwork,
-                "Share one warm link",
-                "Send friends and family to a race page that explains what to record and when it unlocks.",
-              ],
-              [
-                Waveform,
-                "Collect real voices",
-                "Supporters can leave quick encouragement, stories, prayers, jokes, or full pep talks.",
-              ],
-              [
-                Sparkle,
-                "Deliver the boost",
-                "Runners open messages when they need them most, not buried in a group chat.",
-              ],
-            ].map(([Icon, title, body]) => (
-              <article
-                className="rounded-[1.75rem] border bg-card p-6 shadow-sm"
-                key={title as string}
-              >
-                <Icon className="size-7 text-luvy-purple" weight="fill" />
-                <h2 className="mt-8 font-bold text-2xl tracking-tight">
-                  {title as string}
-                </h2>
-                <p className="mt-3 text-muted-foreground leading-7">
-                  {body as string}
-                </p>
-              </article>
-            ))}
+        <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+            <div>
+              <p className="font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
+                The problem
+              </p>
+              <h2 className="mt-4 text-balance font-bold text-4xl tracking-[-0.05em] sm:text-5xl">
+                Race-day encouragement usually arrives too early, too late, or
+                buried in a group chat.
+              </h2>
+            </div>
+            <div className="grid content-start gap-8 text-lg leading-8 text-muted-foreground">
+              <p>
+                Texts are easy to miss when you are focused, tired, or out on
+                the course. Luvy turns support into a simple ritual: one invite
+                link, real voices, and unlock moments built around the run.
+              </p>
+              <div className="grid gap-6 sm:grid-cols-3">
+                {[
+                  [ShareNetwork, "Invite"],
+                  [Microphone, "Record"],
+                  [LockSimple, "Unlock"],
+                ].map(([Icon, label]) => (
+                  <div
+                    className="flex items-center gap-3"
+                    key={label as string}
+                  >
+                    <Icon className="size-6 text-luvy-purple" weight="fill" />
+                    <span className="font-bold text-foreground">
+                      {label as string}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
         <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
-          <div className="mx-auto grid max-w-6xl items-center gap-8 rounded-[2rem] bg-luvy-warm-panel p-6 sm:p-8 lg:grid-cols-[0.8fr_1fr] lg:p-10">
-            <div className="relative min-h-64 overflow-hidden rounded-[1.5rem] bg-card">
+          <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+            <div className="relative min-h-80 overflow-hidden">
+              <Image
+                alt="Luvy race plate"
+                className="absolute left-1/2 top-0 w-64 -translate-x-1/2 rotate-6 opacity-90 sm:w-80"
+                sizes="(min-width: 640px) 320px, 256px"
+                src={plate}
+              />
               <LuvyMascot
-                className="absolute bottom-0 left-1/2 h-72 w-56 -translate-x-1/2"
+                className="absolute bottom-0 left-1/2 h-72 w-56 -translate-x-1/2 drop-shadow-[0_28px_45px_rgb(40_30_50_/_18%)] sm:h-[21rem] sm:w-64"
                 pose="sitting"
               />
             </div>
             <div>
               <p className="font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
-                Built for runners and their people
+                How it converts support into momentum
               </p>
               <h2 className="mt-4 max-w-2xl font-bold text-4xl tracking-[-0.04em] sm:text-5xl">
-                Turn race support into something they can actually carry.
+                A lightweight funnel for every runner and every supporter.
               </h2>
-              <p className="mt-5 max-w-2xl text-muted-foreground leading-8">
-                Luvy keeps the setup simple for runners and the recording flow
-                simple for supporters, so the emotional part gets all the
-                attention.
-              </p>
-              <div className="mt-7">
+              <ol className="mt-8 grid gap-6">
+                {[
+                  [
+                    "Create a race page",
+                    "Add the race name, date, and unlock timing in a few fields.",
+                  ],
+                  [
+                    "Share one link",
+                    "Friends and family record encouragement without downloading an app.",
+                  ],
+                  [
+                    "Run with voices ready",
+                    "Messages become a private playlist for the moments that need a boost.",
+                  ],
+                ].map(([title, body], index) => (
+                  <li className="grid grid-cols-[auto_1fr] gap-4" key={title}>
+                    <span className="flex size-9 items-center justify-center rounded-full bg-luvy-purple font-bold text-primary-foreground">
+                      {index + 1}
+                    </span>
+                    <span>
+                      <span className="block font-bold text-xl tracking-tight">
+                        {title}
+                      </span>
+                      <span className="mt-1 block text-muted-foreground leading-7">
+                        {body}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <div className="mt-8">
                 <SignUpButton mode="redirect">
-                  <Button size="lg" variant="secondary">
+                  <Button size="lg">
                     Start sending love
                     <ArrowRight />
                   </Button>
@@ -227,7 +282,102 @@ function LandingPage() {
             </div>
           </div>
         </section>
+
+        <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid gap-10 border-y py-10 md:grid-cols-3 md:gap-8">
+              {[
+                [
+                  Waveform,
+                  "For runners",
+                  "Create one emotional home base before the race starts.",
+                ],
+                [
+                  CalendarHeart,
+                  "For supporters",
+                  "Leave a note that feels more personal than another text.",
+                ],
+                [
+                  Sparkle,
+                  "For builders",
+                  "Fork the app, inspect the code, and adapt the idea for your own events.",
+                ],
+              ].map(([Icon, title, body]) => (
+                <article key={title as string}>
+                  <Icon className="size-7 text-luvy-coral" weight="fill" />
+                  <h2 className="mt-5 font-bold text-2xl tracking-tight">
+                    {title as string}
+                  </h2>
+                  <p className="mt-3 text-muted-foreground leading-7">
+                    {body as string}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+          <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
+                Open source
+              </p>
+              <h2 className="mt-4 text-balance font-bold text-4xl tracking-[-0.05em] sm:text-6xl">
+                Built in public for people who want race support to feel human.
+              </h2>
+              <p className="mt-5 max-w-2xl text-muted-foreground leading-8">
+                Luvy is open source. Review the code, suggest improvements, or
+                fork the project for your own endurance community.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link href="https://github.com/crafter-station/luvy">
+                  <Button size="lg" variant="secondary">
+                    View on GitHub
+                    <ArrowRight />
+                  </Button>
+                </Link>
+                <SignUpButton mode="redirect">
+                  <Button size="lg" variant="outline">
+                    Create a race page
+                  </Button>
+                </SignUpButton>
+              </div>
+            </div>
+            <div className="relative min-h-72">
+              <LuvyMascot
+                className="absolute left-2 top-6 h-56 w-44 -rotate-6 opacity-90 sm:left-10"
+                pose="default"
+              />
+              <LuvyMascot
+                className="absolute bottom-0 right-4 h-64 w-52 rotate-6 drop-shadow-[0_30px_50px_rgb(40_30_50_/_18%)] sm:right-14"
+                pose="hi"
+              />
+            </div>
+          </div>
+        </section>
       </main>
+      <footer className="px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <Link
+            className="flex items-center gap-2 font-bold tracking-tight text-luvy-purple"
+            href="/home"
+          >
+            <span className="flex size-9 items-center justify-center rounded-full bg-luvy-peach text-luvy-coral shadow-sm">
+              <Heart className="size-5" weight="fill" />
+            </span>
+            <span className="text-2xl">Luvy</span>
+          </Link>
+          <nav className="flex flex-wrap gap-x-6 gap-y-3">
+            <FooterLink href="/sign-up">Create race page</FooterLink>
+            <FooterLink href="/sign-in">Sign in</FooterLink>
+            <FooterLink href="/races">Races</FooterLink>
+            <FooterLink href="https://github.com/crafter-station/luvy">
+              GitHub
+            </FooterLink>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }
