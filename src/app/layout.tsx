@@ -41,7 +41,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-luvy-lavender/35">
         <ClerkProvider>
           <ThemeProvider>
-            <div className="mx-auto min-h-dvh w-full max-w-6xl bg-background shadow-[0_0_60px_rgb(91_53_200_/_10%)]">
+            <div className="mx-auto min-h-dvh w-full max-w-md bg-background shadow-[0_0_60px_rgb(91_53_200_/_10%)]">
               {children}
             </div>
           </ThemeProvider>

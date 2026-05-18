@@ -110,7 +110,7 @@ function LandingHeroArt() {
 
 function LandingPage() {
   return (
-    <>
+    <div className="relative left-1/2 w-dvw -translate-x-1/2 bg-background">
       <AppHeader showBottomNav={false} wide />
       <main className="overflow-hidden">
         <section className="relative px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
@@ -228,7 +228,7 @@ function LandingPage() {
           </div>
         </section>
       </main>
-    </>
+    </div>
   );
 }
 
