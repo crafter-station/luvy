@@ -5,6 +5,8 @@ import {
   ArrowLeft,
   CheckCircle,
   Microphone,
+  Pause,
+  Play,
   Stop,
   Trash,
 } from "@phosphor-icons/react";
@@ -52,6 +54,7 @@ export function SupporterMessageForm({
   const { isLoaded, isSignedIn } = useUser();
   const [step, setStep] = useState<FlowStep>("intro");
   const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [levels, setLevels] = useState(INITIAL_LEVELS);
   const [audio, setAudio] = useState<File | null>(null);
@@ -65,6 +68,7 @@ export function SupporterMessageForm({
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const startedAtRef = useRef(0);
+  const elapsedBeforePauseMsRef = useRef(0);
   const animationRef = useRef<number | null>(null);
   const intervalRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -81,31 +85,73 @@ export function SupporterMessageForm({
     };
   }, [audioUrl]);
 
-  function cleanupRecording() {
+  function stopRecordingTimer() {
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }
+
+  function stopAnalyser() {
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
       animationRef.current = null;
     }
 
-    if (intervalRef.current) {
-      window.clearInterval(intervalRef.current);
-      intervalRef.current = null;
+    void audioContextRef.current?.close();
+    audioContextRef.current = null;
+  }
+
+  function getCurrentElapsedMs() {
+    const recorder = recorderRef.current;
+
+    if (!recorder || recorder.state !== "recording") {
+      return elapsedBeforePauseMsRef.current;
     }
+
+    return elapsedBeforePauseMsRef.current + Date.now() - startedAtRef.current;
+  }
+
+  function updateElapsedTime() {
+    const nextElapsedMs = getCurrentElapsedMs();
+    setElapsedSeconds(Math.floor(nextElapsedMs / 1000));
+
+    return nextElapsedMs;
+  }
+
+  function startRecordingTimer(recorder: MediaRecorder) {
+    stopRecordingTimer();
+
+    intervalRef.current = window.setInterval(() => {
+      const nextElapsedMs = updateElapsedTime();
+
+      if (
+        nextElapsedMs >= MAX_AUDIO_SECONDS * 1000 &&
+        recorder.state !== "inactive"
+      ) {
+        stopRecording();
+      }
+    }, 250);
+  }
+
+  function cleanupRecording() {
+    stopAnalyser();
+
+    stopRecordingTimer();
 
     streamRef.current?.getTracks().forEach((track) => {
       track.stop();
     });
     streamRef.current = null;
-
-    void audioContextRef.current?.close();
-    audioContextRef.current = null;
   }
 
   function resetRecording() {
     cleanupRecording();
     recorderRef.current = null;
     chunksRef.current = [];
+    elapsedBeforePauseMsRef.current = 0;
     setIsRecording(false);
+    setIsPaused(false);
     setElapsedSeconds(0);
     setLevels(INITIAL_LEVELS);
   }
@@ -178,6 +224,7 @@ export function SupporterMessageForm({
       recorderRef.current = recorder;
       chunksRef.current = [];
       startedAtRef.current = Date.now();
+      elapsedBeforePauseMsRef.current = 0;
 
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -186,8 +233,9 @@ export function SupporterMessageForm({
       };
 
       recorder.onstop = async () => {
+        elapsedBeforePauseMsRef.current = getCurrentElapsedMs();
         const nextDuration = toStoredDurationSeconds(
-          (Date.now() - startedAtRef.current) / 1000,
+          elapsedBeforePauseMsRef.current / 1000,
         );
         const contentType = recorder.mimeType || "audio/webm";
         const blob = new Blob(chunksRef.current, { type: contentType });
@@ -197,6 +245,7 @@ export function SupporterMessageForm({
 
         cleanupRecording();
         setIsRecording(false);
+        setIsPaused(false);
 
         if (nextDuration > MAX_AUDIO_SECONDS) {
           setError("Keep messages under 2 minutes.");
@@ -220,20 +269,9 @@ export function SupporterMessageForm({
       startAnalyser(stream);
       recorder.start();
       setIsRecording(true);
+      setIsPaused(false);
       setElapsedSeconds(0);
-
-      intervalRef.current = window.setInterval(() => {
-        const nextElapsedMs = Date.now() - startedAtRef.current;
-        const nextElapsed = Math.floor(nextElapsedMs / 1000);
-        setElapsedSeconds(nextElapsed);
-
-        if (
-          nextElapsedMs >= MAX_AUDIO_SECONDS * 1000 &&
-          recorder.state !== "inactive"
-        ) {
-          recorder.stop();
-        }
-      }, 250);
+      startRecordingTimer(recorder);
     } catch {
       cleanupRecording();
       setStep("intro");
@@ -242,17 +280,48 @@ export function SupporterMessageForm({
   }
 
   function stopRecording() {
-    if (intervalRef.current) {
-      window.clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+    stopRecordingTimer();
+    elapsedBeforePauseMsRef.current = getCurrentElapsedMs();
 
     const recorder = recorderRef.current;
 
     if (recorder && recorder.state !== "inactive") {
       setIsRecording(false);
+      setIsPaused(false);
       recorder.stop();
     }
+  }
+
+  function pauseRecording() {
+    const recorder = recorderRef.current;
+
+    if (!recorder || recorder.state !== "recording") {
+      return;
+    }
+
+    elapsedBeforePauseMsRef.current = updateElapsedTime();
+    recorder.pause();
+    stopRecordingTimer();
+    stopAnalyser();
+    setIsPaused(true);
+  }
+
+  function resumeRecording() {
+    const recorder = recorderRef.current;
+
+    if (!recorder || recorder.state !== "paused") {
+      return;
+    }
+
+    recorder.resume();
+    startedAtRef.current = Date.now();
+    setIsPaused(false);
+
+    if (streamRef.current) {
+      startAnalyser(streamRef.current);
+    }
+
+    startRecordingTimer(recorder);
   }
 
   async function submit() {
@@ -435,13 +504,13 @@ export function SupporterMessageForm({
               <div className="grid gap-8 text-center">
                 <div>
                   <p className="font-bold text-luvy-coral text-xs uppercase tracking-[0.18em]">
-                    Recording
+                    {isPaused ? "Paused" : "Recording"}
                   </p>
                   <p className="mt-3 font-bold text-7xl tabular-nums tracking-[-0.06em] text-luvy-purple">
                     {formatDuration(elapsedSeconds)}
                   </p>
                 </div>
-                <div className="flex h-36 items-center justify-center gap-1 rounded-[2rem] bg-luvy-lavender px-5 shadow-inner">
+                <div className="flex h-36 items-center justify-center gap-1 px-5">
                   {levels.map((height, index) => (
                     <span
                       className="w-1.5 rounded-full bg-luvy-purple odd:bg-luvy-blue"
@@ -458,17 +527,36 @@ export function SupporterMessageForm({
                   />
                 </div>
                 <p className="text-muted-foreground text-sm">
-                  Say only what matters. Stop when your message feels complete.
+                  Say only what matters. Pause if you need a moment, then finish
+                  when your message feels complete.
                 </p>
-                <Button
-                  className="mx-auto w-full max-w-xs bg-luvy-coral text-white hover:bg-luvy-coral/90"
-                  size="lg"
-                  type="button"
-                  onClick={stopRecording}
-                >
-                  <Stop weight="fill" />
-                  {isRecording ? "Stop recording" : "Stopping..."}
-                </Button>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    className="w-full"
+                    disabled={!isRecording}
+                    size="lg"
+                    type="button"
+                    variant="outline"
+                    onClick={isPaused ? resumeRecording : pauseRecording}
+                  >
+                    {isPaused ? (
+                      <Play weight="fill" />
+                    ) : (
+                      <Pause weight="fill" />
+                    )}
+                    {isPaused ? "Resume" : "Pause"}
+                  </Button>
+                  <Button
+                    className="w-full bg-luvy-coral text-white hover:bg-luvy-coral/90"
+                    disabled={!isRecording}
+                    size="lg"
+                    type="button"
+                    onClick={stopRecording}
+                  >
+                    <Stop weight="fill" />
+                    {isRecording ? "Finish" : "Finishing..."}
+                  </Button>
+                </div>
               </div>
             ) : null}
 
