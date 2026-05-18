@@ -12,12 +12,13 @@ import {
 } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { AudioWavePlayer } from "@/components/audio-wave-player";
 import { LuvyMascot } from "@/components/luvy-mascot";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
 import { MAX_AUDIO_BYTES, MAX_AUDIO_SECONDS } from "@/lib/validations";
 
 type FlowStep = "intro" | "record" | "review" | "visibility" | "success";
@@ -62,7 +63,7 @@ export function SupporterMessageForm({
   const [durationSeconds, setDurationSeconds] = useState(0);
   const [visibility, setVisibility] = useState("public");
   const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -325,6 +326,10 @@ export function SupporterMessageForm({
   }
 
   async function submit() {
+    if (isSubmitting) {
+      return;
+    }
+
     setError(null);
 
     if (!audio) {
@@ -339,21 +344,26 @@ export function SupporterMessageForm({
     formData.set("durationSeconds", String(durationSeconds));
     formData.set("audio", audio);
 
-    const response = await fetch("/api/messages", {
-      method: "POST",
-      body: formData,
-    });
+    setIsSubmitting(true);
 
-    if (!response.ok) {
-      const body = await response.json().catch(() => null);
-      setError(body?.error ?? "Could not save your message.");
-      return;
+    try {
+      const response = await fetch("/api/messages", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setError(body?.error ?? "Could not save your message.");
+        return;
+      }
+
+      resetAudio();
+      router.refresh();
+      setStep("success");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    resetAudio();
-    setVisibility("public");
-    router.refresh();
-    startTransition(() => setStep("success"));
   }
 
   function withShareButton(action: ReactNode) {
@@ -433,13 +443,17 @@ export function SupporterMessageForm({
     if (step === "visibility") {
       return (
         <Button
-          className="w-full"
-          disabled={isPending}
+          className={cn(
+            "w-full",
+            isSubmitting &&
+              "relative overflow-hidden disabled:opacity-75 before:absolute before:inset-0 before:animate-pulse before:bg-gradient-to-r before:from-primary before:via-luvy-coral before:to-primary before:content-['']",
+          )}
+          disabled={isSubmitting}
           size="lg"
           type="button"
           onClick={() => void submit()}
         >
-          {isPending ? "Sending..." : "Send with love"}
+          <span className="relative z-10">Send with love</span>
         </Button>
       );
     }
@@ -489,7 +503,8 @@ export function SupporterMessageForm({
             <div className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-background via-background to-background/0 px-4 pb-8 pt-[max(env(safe-area-inset-top),1rem)]">
               <div className="mx-auto w-full max-w-md">
                 <button
-                  className="flex w-fit items-center gap-2 rounded-full bg-card/80 px-3 py-2 text-muted-foreground text-sm shadow-sm transition-colors hover:text-foreground"
+                  className="flex w-fit items-center gap-2 rounded-full bg-card/80 px-3 py-2 text-muted-foreground text-sm shadow-sm transition-colors hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
+                  disabled={isSubmitting}
                   type="button"
                   onClick={() => setStep("review")}
                 >
@@ -601,14 +616,23 @@ export function SupporterMessageForm({
                 </div>
                 <RadioGroup
                   className="grid gap-3"
+                  disabled={isSubmitting}
                   value={visibility}
-                  onValueChange={setVisibility}
+                  onValueChange={(nextVisibility) => {
+                    if (!isSubmitting) {
+                      setVisibility(nextVisibility);
+                    }
+                  }}
                 >
                   <label
-                    className="flex items-start gap-3 rounded-2xl border border-transparent p-3 text-sm transition-colors has-[[data-checked]]:border-luvy-purple has-[[data-checked]]:bg-luvy-lavender"
+                    className="flex items-start gap-3 rounded-2xl border border-transparent p-3 text-sm transition-colors has-disabled:pointer-events-none has-disabled:opacity-60 has-[[data-checked]]:border-luvy-purple has-[[data-checked]]:bg-luvy-lavender"
                     htmlFor="visibility-public"
                   >
-                    <RadioGroupItem id="visibility-public" value="public" />
+                    <RadioGroupItem
+                      disabled={isSubmitting}
+                      id="visibility-public"
+                      value="public"
+                    />
                     <span>
                       <span className="block font-bold">Public</span>
                       <span className="text-muted-foreground text-xs">
@@ -617,10 +641,14 @@ export function SupporterMessageForm({
                     </span>
                   </label>
                   <label
-                    className="flex items-start gap-3 rounded-2xl border border-transparent p-3 text-sm transition-colors has-[[data-checked]]:border-luvy-purple has-[[data-checked]]:bg-luvy-lavender"
+                    className="flex items-start gap-3 rounded-2xl border border-transparent p-3 text-sm transition-colors has-disabled:pointer-events-none has-disabled:opacity-60 has-[[data-checked]]:border-luvy-purple has-[[data-checked]]:bg-luvy-lavender"
                     htmlFor="visibility-private"
                   >
-                    <RadioGroupItem id="visibility-private" value="private" />
+                    <RadioGroupItem
+                      disabled={isSubmitting}
+                      id="visibility-private"
+                      value="private"
+                    />
                     <span>
                       <span className="block font-bold">Private</span>
                       <span className="text-muted-foreground text-xs">
