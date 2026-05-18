@@ -141,7 +141,7 @@ function FooterLink({
   );
 }
 
-function LandingPage() {
+export function LandingPage() {
   return (
     <div className="relative left-1/2 w-dvw -translate-x-1/2 bg-background">
       <AppHeader showBottomNav={false} wide />
