@@ -450,15 +450,12 @@ export function SupporterMessageForm({
                     />
                   ))}
                 </div>
-                <div className="relative mx-auto h-32 w-44">
-                  <div className="absolute inset-x-8 bottom-0 h-12 rounded-full bg-luvy-coral/20 blur-xl" />
+                <div className="relative mx-auto h-40 w-52">
+                  <div className="absolute inset-x-8 bottom-0 h-14 rounded-full bg-luvy-coral/20 blur-xl" />
                   <LuvyMascot
-                    className="absolute bottom-0 left-1/2 h-32 w-28 -translate-x-1/2"
+                    className="absolute bottom-0 left-1/2 h-40 w-36 -translate-x-1/2"
                     pose="hi"
                   />
-                  <div className="absolute right-0 top-4 flex size-14 items-center justify-center rounded-2xl bg-luvy-coral text-white shadow-[0_18px_44px_rgb(255_120_107_/_35%)]">
-                    <Microphone className="size-7" weight="fill" />
-                  </div>
                 </div>
                 <p className="text-muted-foreground text-sm">
                   Say only what matters. Stop when your message feels complete.
@@ -477,7 +474,7 @@ export function SupporterMessageForm({
 
             {step === "review" ? (
               <div className="grid gap-5 text-center">
-                <LuvyMascot className="h-28 w-24" pose="default" />
+                <LuvyMascot className="h-36 w-32" pose="default" />
                 <div>
                   <p className="font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
                     Review
@@ -505,7 +502,7 @@ export function SupporterMessageForm({
 
             {step === "visibility" ? (
               <div className="grid gap-5">
-                <LuvyMascot className="h-28 w-24" pose="sitting" />
+                <LuvyMascot className="h-36 w-32" pose="sitting" />
                 <div>
                   <p className="font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
                     Privacy
@@ -549,7 +546,7 @@ export function SupporterMessageForm({
 
             {step === "success" ? (
               <div className="grid justify-items-center gap-4 text-center">
-                <LuvyMascot className="h-32 w-28" pose="hi" />
+                <LuvyMascot className="h-40 w-36" pose="hi" />
                 <span className="flex size-16 items-center justify-center rounded-full bg-luvy-lavender text-luvy-purple">
                   <CheckCircle className="size-9" weight="fill" />
                 </span>
