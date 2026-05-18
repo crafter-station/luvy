@@ -6,6 +6,12 @@ function messageKey(message: MessageCardItem) {
   return "message" in message ? message.message.id : message.id;
 }
 
+type CanPlayMessage = boolean | ((message: MessageCardItem) => boolean);
+
+function canPlayMessage(canPlay: CanPlayMessage, message: MessageCardItem) {
+  return typeof canPlay === "function" ? canPlay(message) : canPlay;
+}
+
 export function MessageList({
   messages,
   canPlay,
@@ -14,7 +20,7 @@ export function MessageList({
   showVisibility = false,
 }: {
   messages: MessageCardItem[];
-  canPlay: boolean;
+  canPlay: CanPlayMessage;
   lockedLabel?: string | null;
   getActions?: (message: MessageCardItem) => ReactNode;
   showVisibility?: boolean;
@@ -35,7 +41,7 @@ export function MessageList({
       {messages.map((message) => (
         <MessageCard
           actions={getActions?.(message)}
-          canPlay={canPlay}
+          canPlay={canPlayMessage(canPlay, message)}
           key={messageKey(message)}
           lockedLabel={lockedLabel}
           message={message}

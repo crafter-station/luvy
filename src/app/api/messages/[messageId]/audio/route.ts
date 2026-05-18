@@ -1,7 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+import { isUnlocked } from "@/lib/dates";
 import { canPublicPlayMessage, getAudioMessage } from "@/lib/messages";
+import { getUserByClerkId } from "@/lib/users";
 
 export const runtime = "nodejs";
 
@@ -21,7 +23,11 @@ export async function GET(
   }
 
   const { userId } = await auth();
-  const canPlayPrivate = userId === row.owner.clerkUserId;
+  const currentUser = userId ? await getUserByClerkId(userId) : null;
+  const canPlayPrivate =
+    isUnlocked(row.run.raceStartsAt) &&
+    (userId === row.owner.clerkUserId ||
+      currentUser?.id === row.message.senderUserId);
 
   if (!canPlayPrivate) {
     return new NextResponse(null, { status: 404 });

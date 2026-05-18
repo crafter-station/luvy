@@ -1,3 +1,4 @@
+import { LockKey } from "@phosphor-icons/react/dist/ssr";
 import type { ReactNode } from "react";
 import { AudioWavePlayer } from "@/components/audio-wave-player";
 import { WaveformLocked } from "@/components/waveform-locked";
@@ -56,9 +57,10 @@ export function MessageCard({
           </div>
         </div>
         <div className="flex shrink-0 items-center justify-end gap-2">
-          {showVisibility ? (
-            <span className="rounded-full border bg-muted px-3 py-1 font-bold text-[10px] uppercase tracking-[0.18em]">
-              {audioMessage.visibility}
+          {showVisibility && audioMessage.visibility === "private" ? (
+            <span className="text-muted-foreground" title="Private message">
+              <span className="sr-only">Private message</span>
+              <LockKey className="size-3.5" weight="fill" />
             </span>
           ) : null}
           {actions}

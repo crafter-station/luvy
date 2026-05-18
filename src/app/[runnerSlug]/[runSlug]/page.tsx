@@ -116,7 +116,12 @@ export default async function PublicRunPage({
           userSlug={runnerSlug}
         />
 
-        <PublicMessagesSection canPlay={unlocked} messages={publicMessages} />
+        <PublicMessagesSection
+          canPlay={unlocked}
+          messages={publicMessages}
+          runSlug={runSlug}
+          runnerSlug={runnerSlug}
+        />
       </main>
     </>
   );

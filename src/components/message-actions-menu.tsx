@@ -7,6 +7,7 @@ import {
   EyeSlash,
   Trash,
 } from "@phosphor-icons/react/dist/ssr";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 
 import {
@@ -38,11 +39,14 @@ type MessagePermissions = {
 
 export function MessageActionsMenu({
   messageId,
+  onDeleted,
   visibility,
 }: {
   messageId: string;
+  onDeleted?: (messageId: string) => void;
   visibility: MessageVisibility;
 }) {
+  const router = useRouter();
   const { isLoaded, isSignedIn } = useUser();
   const [permissions, setPermissions] = useState<MessagePermissions | null>(
     null,
@@ -203,8 +207,10 @@ export function MessageActionsMenu({
                 action={(formData) => {
                   startTransition(async () => {
                     await deleteMessage(formData);
+                    onDeleted?.(messageId);
                     setIsDeleted(true);
                     setDeleteOpen(false);
+                    router.refresh();
                   });
                 }}
                 className="grid gap-2"
