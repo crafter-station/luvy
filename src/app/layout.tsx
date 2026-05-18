@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -44,6 +45,7 @@ export default function RootLayout({
               {children}
             </div>
           </ThemeProvider>
+          <Analytics />
         </ClerkProvider>
       </body>
     </html>
