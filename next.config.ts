@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  htmlLimitedBots: /facebookexternalhit|Facebot|InstagramBot/i,
 };
 
 export default nextConfig;
