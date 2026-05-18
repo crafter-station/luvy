@@ -43,6 +43,14 @@ export async function generateMetadata({
     openGraph: {
       title: `${runnerName} is running ${data.run.title}`,
       description,
+      images: [
+        {
+          url: `${path}/opengraph-image`,
+          width: 600,
+          height: 315,
+          type: "image/png",
+        },
+      ],
       url: path,
       siteName: "Luvy.run",
       type: "website",
@@ -51,6 +59,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: `${runnerName} is running ${data.run.title}`,
       description,
+      images: [`${path}/opengraph-image`],
     },
   };
 }

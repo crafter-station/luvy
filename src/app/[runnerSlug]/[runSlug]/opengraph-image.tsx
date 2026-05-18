@@ -8,8 +8,8 @@ import { getRunDetailsByPublicSlugs } from "@/lib/runs";
 export const alt = "Luvy race support page";
 export const contentType = "image/png";
 export const size = {
-  width: 800,
-  height: 420,
+  width: 600,
+  height: 315,
 };
 
 function formatRaceDate(date: Date, timeZone: string) {
@@ -55,42 +55,40 @@ export default async function Image({
         display: "flex",
         position: "relative",
         overflow: "hidden",
-        background: "#fff8ef",
+        background: "#fff7ee",
         color: "#231636",
         fontFamily: "Arial, sans-serif",
-        padding: 30,
+        padding: 24,
       }}
     >
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "radial-gradient(circle at 12% 0%, rgba(122, 78, 206, 0.18), transparent 30%), radial-gradient(circle at 86% 12%, rgba(255, 95, 88, 0.22), transparent 30%), linear-gradient(135deg, rgba(247, 237, 255, 0.92), rgba(255, 248, 239, 0.95))",
+          background: "#fff7ee",
         }}
       />
       <div
         style={{
           position: "absolute",
-          right: -68,
-          top: 24,
-          width: 310,
-          height: 520,
-          borderRadius: 56,
-          background: "linear-gradient(180deg, #ffb6a8, #ff625c)",
-          opacity: 0.86,
-          transform: "rotate(8deg)",
+          right: -44,
+          top: 0,
+          width: 210,
+          height: 315,
+          borderRadius: 42,
+          background: "#ff8c7c",
+          transform: "rotate(7deg)",
         }}
       />
       <div
         style={{
           position: "absolute",
-          left: 30,
-          bottom: -110,
-          width: 240,
-          height: 240,
+          left: 24,
+          bottom: -92,
+          width: 190,
+          height: 190,
           borderRadius: 999,
-          background: "rgba(122, 78, 206, 0.14)",
+          background: "#eadff7",
         }}
       />
 
@@ -99,7 +97,7 @@ export default async function Image({
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          width: 510,
+          width: 380,
           zIndex: 1,
         }}
       >
@@ -110,7 +108,7 @@ export default async function Image({
             style={{
               display: "flex",
               color: "#ff5f58",
-              fontSize: 19,
+              fontSize: 14,
               fontWeight: 800,
               letterSpacing: "0.12em",
               textTransform: "uppercase",
@@ -121,7 +119,7 @@ export default async function Image({
           <div
             style={{
               display: "flex",
-              fontSize: 54,
+              fontSize: 42,
               fontWeight: 900,
               letterSpacing: "-0.06em",
               lineHeight: 0.88,
@@ -133,7 +131,7 @@ export default async function Image({
             style={{
               display: "flex",
               color: "#5c3b83",
-              fontSize: 32,
+              fontSize: 25,
               fontWeight: 800,
               letterSpacing: "-0.035em",
               lineHeight: 1.05,
@@ -146,7 +144,7 @@ export default async function Image({
               display: "flex",
               alignItems: "center",
               color: "#6d6077",
-              fontSize: 20,
+              fontSize: 16,
               fontWeight: 800,
             }}
           >
@@ -164,7 +162,7 @@ export default async function Image({
           alignItems: "center",
           justifyContent: "center",
           marginLeft: "auto",
-          width: 220,
+          width: 160,
           zIndex: 1,
         }}
       >
@@ -173,12 +171,11 @@ export default async function Image({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 198,
-            height: 198,
-            borderRadius: 42,
+            width: 146,
+            height: 146,
+            borderRadius: 32,
             background: "#ffffff",
-            border: "8px solid #ffe4dc",
-            boxShadow: "0 28px 70px rgba(54, 26, 96, 0.24)",
+            border: "6px solid #ffe4dc",
             overflow: "hidden",
             transform: "rotate(2deg)",
           }}
@@ -187,10 +184,10 @@ export default async function Image({
             // biome-ignore lint/performance/noImgElement: ImageResponse renders remote images with plain img tags.
             <img
               alt={runnerName}
-              height={198}
+              height={146}
               src={data.user.imageUrl}
               style={{ objectFit: "cover" }}
-              width={198}
+              width={146}
             />
           ) : (
             <div
@@ -202,7 +199,7 @@ export default async function Image({
                 height: "100%",
                 background: "#ffe6d7",
                 color: "#ff5f58",
-                fontSize: 64,
+                fontSize: 46,
                 fontWeight: 900,
               }}
             >
@@ -215,21 +212,20 @@ export default async function Image({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            width: 118,
-            height: 92,
-            marginTop: -22,
+            width: 90,
+            height: 70,
+            marginTop: -16,
             borderRadius: 999,
-            background: "rgba(255, 248, 239, 0.9)",
-            boxShadow: "0 16px 36px rgba(54, 26, 96, 0.16)",
+            background: "#fff7ee",
           }}
         >
           {/* biome-ignore lint/performance/noImgElement: ImageResponse renders static assets with plain img tags. */}
           <img
             alt="Luvy heart bag"
-            height={92}
+            height={70}
             src={heartUrl}
             style={{ objectFit: "contain" }}
-            width={118}
+            width={90}
           />
         </div>
         <div
@@ -237,9 +233,9 @@ export default async function Image({
             display: "flex",
             borderRadius: 999,
             color: "#2f1947",
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: 800,
-            marginTop: 10,
+            marginTop: 6,
             textAlign: "center",
           }}
         >
