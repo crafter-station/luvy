@@ -2,6 +2,7 @@
 
 import { SignInButton, useUser } from "@clerk/nextjs";
 import {
+  ArrowClockwise,
   ArrowLeft,
   CheckCircle,
   Microphone,
@@ -9,6 +10,7 @@ import {
   Play,
   Stop,
   Trash,
+  X,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -147,6 +149,14 @@ export function SupporterMessageForm({
   }
 
   function resetRecording() {
+    const recorder = recorderRef.current;
+
+    if (recorder && recorder.state !== "inactive") {
+      recorder.ondataavailable = null;
+      recorder.onstop = null;
+      recorder.stop();
+    }
+
     cleanupRecording();
     recorderRef.current = null;
     chunksRef.current = [];
@@ -166,6 +176,17 @@ export function SupporterMessageForm({
     setAudioUrl(null);
     setDurationSeconds(0);
     resetRecording();
+  }
+
+  function quitForm() {
+    setError(null);
+    resetAudio();
+    setStep("intro");
+  }
+
+  function restartRecording() {
+    resetAudio();
+    void startRecording();
   }
 
   function startAnalyser(stream: MediaStream) {
@@ -514,6 +535,21 @@ export function SupporterMessageForm({
               </div>
             </div>
           ) : null}
+          {step === "record" ? (
+            <div className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-background via-background to-background/0 px-4 pb-8 pt-[max(env(safe-area-inset-top),1rem)]">
+              <div className="mx-auto flex w-full max-w-md justify-start">
+                <Button
+                  aria-label="Quit recording"
+                  size="icon"
+                  type="button"
+                  variant="ghost"
+                  onClick={quitForm}
+                >
+                  <X />
+                </Button>
+              </div>
+            </div>
+          ) : null}
           <section className="mx-auto grid min-h-[calc(100svh-10rem)] w-full max-w-md content-center gap-5">
             {step === "record" ? (
               <div className="grid gap-8 text-center">
@@ -545,7 +581,7 @@ export function SupporterMessageForm({
                   Say only what matters. Pause if you need a moment, then finish
                   when your message feels complete.
                 </p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-2">
                   <Button
                     className="w-full"
                     disabled={!isRecording}
@@ -562,7 +598,18 @@ export function SupporterMessageForm({
                     {isPaused ? "Resume" : "Pause"}
                   </Button>
                   <Button
-                    className="w-full bg-luvy-coral text-white hover:bg-luvy-coral/90"
+                    className="w-full px-3"
+                    disabled={!isRecording}
+                    size="lg"
+                    type="button"
+                    variant="outline"
+                    onClick={restartRecording}
+                  >
+                    <ArrowClockwise />
+                    Restart
+                  </Button>
+                  <Button
+                    className="w-full bg-luvy-coral px-3 text-white hover:bg-luvy-coral/90"
                     disabled={!isRecording}
                     size="lg"
                     type="button"
