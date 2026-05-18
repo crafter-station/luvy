@@ -17,6 +17,7 @@ export function RunnerHandleForm({
           Display name
         </label>
         <Input
+          key={displayName ?? ""}
           id="displayName"
           name="displayName"
           required
@@ -29,6 +30,7 @@ export function RunnerHandleForm({
           Public handle
         </label>
         <Input
+          key={currentSlug}
           id="userSlug"
           name="userSlug"
           required
