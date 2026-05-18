@@ -13,6 +13,7 @@ import type { ReactNode } from "react";
 import { useEffect, useRef, useState, useTransition } from "react";
 
 import { AudioWavePlayer } from "@/components/audio-wave-player";
+import { LuvyMascot } from "@/components/luvy-mascot";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { MAX_AUDIO_BYTES, MAX_AUDIO_SECONDS } from "@/lib/validations";
@@ -415,6 +416,20 @@ export function SupporterMessageForm({
 
       {step !== "intro" ? (
         <div className="fixed inset-0 z-40 overflow-y-auto bg-background px-4 pb-32 pt-6">
+          {step === "visibility" ? (
+            <div className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-background via-background to-background/0 px-4 pb-8 pt-[max(env(safe-area-inset-top),1rem)]">
+              <div className="mx-auto w-full max-w-md">
+                <button
+                  className="flex w-fit items-center gap-2 rounded-full bg-card/80 px-3 py-2 text-muted-foreground text-sm shadow-sm transition-colors hover:text-foreground"
+                  type="button"
+                  onClick={() => setStep("review")}
+                >
+                  <ArrowLeft />
+                  Back to review
+                </button>
+              </div>
+            </div>
+          ) : null}
           <section className="mx-auto grid min-h-[calc(100svh-10rem)] w-full max-w-md content-center gap-5">
             {step === "record" ? (
               <div className="grid gap-8 text-center">
@@ -435,8 +450,15 @@ export function SupporterMessageForm({
                     />
                   ))}
                 </div>
-                <div className="mx-auto flex size-28 items-center justify-center rounded-[2rem] bg-luvy-coral text-white shadow-[0_18px_44px_rgb(255_120_107_/_35%)]">
-                  <Microphone className="size-14" weight="fill" />
+                <div className="relative mx-auto h-32 w-44">
+                  <div className="absolute inset-x-8 bottom-0 h-12 rounded-full bg-luvy-coral/20 blur-xl" />
+                  <LuvyMascot
+                    className="absolute bottom-0 left-1/2 h-32 w-28 -translate-x-1/2"
+                    pose="hi"
+                  />
+                  <div className="absolute right-0 top-4 flex size-14 items-center justify-center rounded-2xl bg-luvy-coral text-white shadow-[0_18px_44px_rgb(255_120_107_/_35%)]">
+                    <Microphone className="size-7" weight="fill" />
+                  </div>
                 </div>
                 <p className="text-muted-foreground text-sm">
                   Say only what matters. Stop when your message feels complete.
@@ -455,6 +477,7 @@ export function SupporterMessageForm({
 
             {step === "review" ? (
               <div className="grid gap-5 text-center">
+                <LuvyMascot className="h-28 w-24" pose="default" />
                 <div>
                   <p className="font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
                     Review
@@ -482,14 +505,7 @@ export function SupporterMessageForm({
 
             {step === "visibility" ? (
               <div className="grid gap-5">
-                <button
-                  className="flex w-fit items-center gap-2 text-muted-foreground text-sm"
-                  type="button"
-                  onClick={() => setStep("review")}
-                >
-                  <ArrowLeft />
-                  Back to review
-                </button>
+                <LuvyMascot className="h-28 w-24" pose="sitting" />
                 <div>
                   <p className="font-bold text-luvy-purple text-xs uppercase tracking-[0.18em]">
                     Privacy
@@ -533,6 +549,7 @@ export function SupporterMessageForm({
 
             {step === "success" ? (
               <div className="grid justify-items-center gap-4 text-center">
+                <LuvyMascot className="h-32 w-28" pose="hi" />
                 <span className="flex size-16 items-center justify-center rounded-full bg-luvy-lavender text-luvy-purple">
                   <CheckCircle className="size-9" weight="fill" />
                 </span>
