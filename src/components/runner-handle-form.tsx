@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { RunnerHandleSubmitButton } from "@/components/runner-handle-submit-button";
 import { Input } from "@/components/ui/input";
 
 export function RunnerHandleForm({
@@ -40,9 +40,7 @@ export function RunnerHandleForm({
         Changing your handle changes every race link. Old links will stop
         working, so reshare your race pages after saving.
       </p>
-      <Button className="w-fit" type="submit" variant="outline">
-        Save handle
-      </Button>
+      <RunnerHandleSubmitButton />
     </form>
   );
 }
