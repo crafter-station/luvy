@@ -1,6 +1,7 @@
-import { Heart } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import type { ReactNode } from "react";
+
+import { RabbitEarsLogo } from "@/components/rabbit-ears-logo";
 
 export function PublicRunHero({
   raceTitle,
@@ -28,7 +29,7 @@ export function PublicRunHero({
             />
           ) : (
             <div className="flex size-20 items-center justify-center rounded-full bg-luvy-peach text-luvy-coral">
-              <Heart className="size-9" weight="fill" />
+              <RabbitEarsLogo className="size-12" />
             </div>
           )}
           <h1 className="mt-2 font-bold text-2xl tracking-[-0.03em]">

@@ -1,8 +1,8 @@
-import { Heart } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { AppHeaderAuthControls } from "@/components/app-header-auth-controls";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
+import { RabbitEarsLogo } from "@/components/rabbit-ears-logo";
 import { cn } from "@/lib/utils";
 
 export function AppHeader({
@@ -22,13 +22,11 @@ export function AppHeader({
           )}
         >
           <Link
-            className="flex items-center gap-2 font-bold tracking-tight text-luvy-purple"
+            className="flex items-center gap-2 font-bold tracking-tight text-foreground"
             href="/home"
           >
-            <span className="flex size-9 items-center justify-center rounded-full bg-luvy-peach text-luvy-coral shadow-sm">
-              <Heart className="size-5" weight="fill" />
-            </span>
-            <span className="text-2xl">Luvy</span>
+            <RabbitEarsLogo className="size-7" />
+            <span className="text-2xl">luvy</span>
           </Link>
           <div className="flex items-center gap-2">
             <AppHeaderAuthControls />

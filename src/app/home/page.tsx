@@ -17,6 +17,7 @@ import Link from "next/link";
 import plate from "@/app/public/assets/plate.png";
 import { AppHeader } from "@/components/app-header";
 import { LuvyMascot } from "@/components/luvy-mascot";
+import { RabbitEarsLogo } from "@/components/rabbit-ears-logo";
 import { Button } from "@/components/ui/button";
 import { formatRaceTime } from "@/lib/dates";
 import { getHomeFeed } from "@/lib/runs";
@@ -364,13 +365,11 @@ function LandingPage() {
       <footer className="px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 border-t pt-8 sm:flex-row sm:items-center sm:justify-between">
           <Link
-            className="flex items-center gap-2 font-bold tracking-tight text-luvy-purple"
+            className="flex items-center gap-2 font-bold tracking-tight text-foreground"
             href="/home"
           >
-            <span className="flex size-9 items-center justify-center rounded-full bg-luvy-peach text-luvy-coral shadow-sm">
-              <Heart className="size-5" weight="fill" />
-            </span>
-            <span className="text-2xl">Luvy</span>
+            <RabbitEarsLogo className="size-7" />
+            <span className="text-2xl">luvy</span>
           </Link>
           <nav className="flex flex-wrap gap-x-6 gap-y-3">
             <FooterLink href="/sign-up">Create race page</FooterLink>
