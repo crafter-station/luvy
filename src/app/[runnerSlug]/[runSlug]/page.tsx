@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { AppHeader } from "@/components/app-header";
@@ -7,10 +8,52 @@ import { PublicRunHero } from "@/components/public-run-hero";
 import { PublicShareButton } from "@/components/public-share-button";
 import { SupporterMessageForm } from "@/components/supporter-message-form";
 import { formatRaceTime, isUnlocked } from "@/lib/dates";
-import { getRunByPublicSlugs } from "@/lib/runs";
+import { getRunByPublicSlugs, getRunDetailsByPublicSlugs } from "@/lib/runs";
 
 export const dynamic = "force-static";
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ runnerSlug: string; runSlug: string }>;
+}): Promise<Metadata> {
+  const { runnerSlug, runSlug } = await params;
+  const data = await getRunDetailsByPublicSlugs(runnerSlug, runSlug);
+
+  if (!data) {
+    return {};
+  }
+
+  const runnerName = data.user.displayName ?? data.user.slug;
+  const raceDate = new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    timeZone: data.run.raceTimezone,
+  }).format(data.run.raceStartsAt);
+  const description = `${runnerName} is running in the ${data.run.title} on ${raceDate}. Show them some love.`;
+  const path = `/${runnerSlug}/${runSlug}`;
+
+  return {
+    title: `${runnerName} is running ${data.run.title}`,
+    description,
+    alternates: {
+      canonical: path,
+    },
+    openGraph: {
+      title: `${runnerName} is running ${data.run.title}`,
+      description,
+      url: path,
+      siteName: "Luvy.run",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${runnerName} is running ${data.run.title}`,
+      description,
+    },
+  };
+}
 
 export default async function PublicRunPage({
   params,

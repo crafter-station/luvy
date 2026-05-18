@@ -9,12 +9,7 @@ export async function getRunByPublicSlugs(
   runSlug: string,
   sort: SortDirection,
 ) {
-  const [row] = await db
-    .select({ user: users, run: runs })
-    .from(runs)
-    .innerJoin(users, eq(runs.userId, users.id))
-    .where(and(eq(users.slug, userSlug), eq(runs.slug, runSlug)))
-    .limit(1);
+  const row = await getRunDetailsByPublicSlugs(userSlug, runSlug);
 
   if (!row) {
     return null;
@@ -30,6 +25,20 @@ export async function getRunByPublicSlugs(
     );
 
   return { ...row, messages: runMessages };
+}
+
+export async function getRunDetailsByPublicSlugs(
+  userSlug: string,
+  runSlug: string,
+) {
+  const [row] = await db
+    .select({ user: users, run: runs })
+    .from(runs)
+    .innerJoin(users, eq(runs.userId, users.id))
+    .where(and(eq(users.slug, userSlug), eq(runs.slug, runSlug)))
+    .limit(1);
+
+  return row ?? null;
 }
 
 export async function getRunnerRuns(clerkUserId: string) {

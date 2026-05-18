@@ -17,6 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://luvy.run"),
   title: "Luvy.run",
   description: "Voice notes for race day. Send love they hear when it matters.",
 };
