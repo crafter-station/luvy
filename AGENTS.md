@@ -4,23 +4,24 @@
 
 - Package manager: this repo has `bun.lock`; prefer `bun run <script>` and `bun install`.
 - Dev server: `bun run dev` starts Next on `http://localhost:3000`.
-- Verification: `bun run lint` runs `biome check`; `bun run build` is the only configured type/build check. There is no test script.
+- Verification: `bun run lint` runs `biome check`; `bun run build` is the only configured type/build check. There is no `test` script.
 - Formatting: `bun run format` runs `biome format --write`.
 - Drizzle: edit `src/db/schema.ts`, then run `bun run db:generate`; apply migrations with `bun run db:migrate`.
 
 ## App Shape
 
 - Next is pinned to `16.2.6` with React `19.2.4`; verify Next API details instead of relying on older App Router memory.
-- App entrypoints live in `src/app`; this repo uses Next 16 async `params`/`searchParams` promises in pages and route handlers.
-- Auth is Clerk. `src/proxy.ts`, not `middleware.ts`, protects `/dashboard(.*)` and includes Clerk matchers.
+- App entrypoints live in `src/app`; dynamic pages and route handlers use Next 16 async `params` promises.
+- Auth is Clerk. `src/proxy.ts`, not `middleware.ts`, protects `/dashboard(.*)`, `/profile(.*)`, `/races(.*)`, and `/sent(.*)`.
 - Database access is Drizzle over Neon HTTP from `src/db/index.ts`; schema and inferred row types live in `src/db/schema.ts`.
 - Public race pages are `/:runnerSlug/:runSlug`; runner-owned pages are under `/dashboard`.
 - Audio uploads go through `src/app/api/messages/route.ts`, store files in Vercel Blob, and require Node runtime. Playback redirects through `src/app/api/messages/[messageId]/audio/route.ts` after unlock/ownership checks.
+- Clerk user webhooks land at `src/app/api/clerk/webhooks/route.ts` and upsert local `users` rows.
 
 ## Environment
 
-- Local work that hits auth/database/blob needs Clerk env, `DATABASE_URL`, and Vercel Blob credentials. `drizzle.config.ts` reads `DATABASE_URL` directly.
-- `src/db/index.ts` falls back to a fake Postgres URL only to avoid import-time crashes; real DB operations still need `DATABASE_URL`.
+- Local work that hits auth/database/blob needs Clerk env, `DATABASE_URL`, and Vercel Blob credentials.
+- `drizzle.config.ts` reads `DATABASE_URL` directly. `src/db/index.ts` only falls back to a fake Postgres URL to avoid import-time crashes; real DB operations still need `DATABASE_URL`.
 
 ## Conventions
 
