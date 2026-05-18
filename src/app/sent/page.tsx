@@ -53,11 +53,17 @@ export default async function SentPage() {
             </Link>
           </section>
         ) : (
-          <section className="grid gap-3">
+          <section className="grid gap-6">
             {sentMessages.map(({ message, owner, run }) => (
-              <div className="grid gap-2" key={message.id}>
+              <div className="grid gap-3" key={message.id}>
                 <p className="px-1 font-bold text-muted-foreground text-xs">
-                  To {owner.displayName || owner.slug} · {run.title}
+                  To {owner.displayName || owner.slug} ·{" "}
+                  <Link
+                    className="text-foreground underline decoration-luvy-purple/40 underline-offset-4 transition hover:text-luvy-purple hover:decoration-luvy-purple"
+                    href={`/${owner.slug}/${run.slug}`}
+                  >
+                    {run.title}
+                  </Link>
                 </p>
                 <MessageCard
                   actions={
